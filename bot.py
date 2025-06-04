@@ -1,4 +1,4 @@
-
+﻿
 from telegram import Update, ReplyKeyboardMarkup, InputFile
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 
@@ -53,7 +53,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await update.message.reply_text("Обери, будь ласка, варіант з меню 👇")
 
-app = ApplicationBuilder().token("PASTE_YOUR_BOT_TOKEN_HERE").build()
+import os
+app = ApplicationBuilder().token(os.getenv("BOT_TOKEN")).build()
 app.add_handler(CommandHandler("start", start))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 app.run_polling()
+
