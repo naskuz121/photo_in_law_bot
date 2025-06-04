@@ -1,113 +1,50 @@
-﻿from telegram import Update, ReplyKeyboardMarkup
+from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 import os
 
-main_buttons = [[' Отримати гайд', ' Детальніше про курс']]
-more_button = [[' Хочу!']]
-payment_buttons = [[' Тарифи'], [' Перейти до оплати', ' Задати питання']]
+main_buttons = [['📥 Отримати гайд', 'ℹ️ Детальніше про курс']]
+more_button = [['🔥 Хочу!']]
+payment_buttons = [['💳 Тарифи'], ['➡️ Перейти до оплати', '❓ Задати питання']]
 keyboard_main = ReplyKeyboardMarkup(main_buttons, resize_keyboard=True)
 keyboard_more = ReplyKeyboardMarkup(more_button, resize_keyboard=True)
 keyboard_payment = ReplyKeyboardMarkup(payment_buttons, resize_keyboard=True)
 
 guide_link = "https://drive.google.com/uc?export=download&id=1Tp9DIgYJQHk_8g8NpQwkfga6BOk7penK"
 guide_message = (
-    "Привіт, фотограф!\n\n"
-    f" [Скачати гайд «Захист авторського права для фотографа»]({guide_link})\n\n"
-    "Ти вже зробив перший крок до впевненості у своїх правах.\n"
-    "А тепер — давай по-справжньому розберемося, як ЗАХИСТИТИ себе, свої фото і свої гроші.\n\n"
-    "Запрошую тебе на мій онлайн-курс «Фотограф в законі» — це юридичний захист, який не зітреться фільтром.\n\n"
-    "Хочеш більше інформації про курс або дізнатися вартість участі?"
+    "Привіт, фотограф!\n\n"
+    f"🎁 [Скачати гайд «Захист авторського права для фотографа»]({guide_link})\n\n"
+    "Ти вже зробив перший крок до впевненості у своїх правах.\n"
+    "А тепер — давай по-справжньому розберемося, як ЗАХИСТИТИ себе, свої фото і свої гроші.\n\n"
+    "Запрошую тебе на мій онлайн-курс «Фотограф в законі» — це юридичний захист, який не зітреться фільтром.\n\n"
+    "Хочеш більше інформації про курс або дізнатися вартість участі?"
 )
 
-course_program = (
-    "Програма курсу Фотограф в законі 1.0\n\n"
-    "1. Авторське право фотографа.\n"
-    "1.2. Особисті немайнові права автора. Недоторканість твору.\n"
-    "1.2. Особисті майнові права автора.\n"
-    "1.2. Які твори захищаються авторським правом.\n"
-    "1.3. Способи захисту авторського права.\n"
-    "1.3.1. Розміщення знаку ©\n"
-    "1.3.2. Водяний знак.\n"
-    "1.3.3. Реєстрація авторського права.\n"
-    "1.4. Об’єкти, що не охороняються авторським правом.\n\n"
-    "2. Права інших осіб на твір. Виконання роботи на замовлення.\n"
-    "2.1. Співавторство\n"
-    "2.2. Авторське право на службовий твір\n"
-    "2.3. Авторське право на твір, створений за замовленням\n"
-    "2.4. Підстави для захисту авторського права і суміжних прав\n\n"
-    "3. Копіювання стилю, поз, обстановки. Надихання чужими фото.\n\n"
-    "4. Кому належить право на фото клієнта? Зйомка у публічних місцях, згода на зйомку\n\n"
-    "5. Взаємодія з клієнтами.\n"
-    "5.1. Загальні положення ЦКУ та ЗУ «Про права споживачів».\n"
-    "5.2. На що звернути увагу фотографу в договорі про надання послуг.\n"
-    "5.3. Як оформити передплату правильно і вигідно?\n"
-    "5.4. Клієнту не подобається результат.\n\n"
-    "6. Механізми оформлення стосунків з клієнтом: договір, оферта, згода публікацію фото, що краще обрати? Порівняння.\n\n"
-    "Розгляд на прикладах (в кожному модулі).\n"
-    "6 модулів включають:\n"
-    "• відео уроки по кожному модулю;\n"
-    "• презентація до уроків, із зазначенням статей законів;\n"
-    "• приклади – реальні судові справи по темі.\n"
-    "+ Бонус Гайд – захист авторського права в соцмережах.\n"
-    "+ Бонус урок – реєстрація в електронному суді.\n"
-    "+ Бонус – гайд з моральної шкоди.\n"
-    "+ Бонус – Чек-ліст “Як знімати по референсу без порушення авторських прав”"
-)
+course_program = "Програма курсу Фотограф в законі 1.0\n\n..."
 
-tariffs = (
-    " Базовий пакет — 2 500 грн\n"
-    "Підійде тим, хто хоче отримати основну інформацію без додаткових сервісів.\n"
-    "• Доступ до відео уроків\n"
-    "• Доступ до курсу на 2 місяці\n"
-    "• Презентації та письмові бонуси\n"
-    "• Сертифікат\n"
-    "• Без участі в Zoom-сесії\n\n"
-    " Стандартний пакет — 3 500 грн\n"
-    "База + зворотній звʼязок\n"
-    "• Все з базового пакету\n"
-    "• Участь у Zoom-сесії з відповідями на запитання\n"
-    "• Чат з учасниками\n"
-    "• Можливість задати письмове запитання протягом курсу\n"
-    "• Сертифікат + перевірка фінального тесту.\n\n"
-    " Преміум пакет — 5 000 грн\n"
-    "Для тих, хто хоче максимум практичної цінності та персональної уваги\n"
-    "• Все зі стандартного пакету\n"
-    "• Індивідуальна 30-хв консультація з юристом Анастасією за попереднім записом\n"
-    "• Пріоритетний розгляд питань\n"
-    "• Доступ до курсу на півроку (включаючи оновлення)\n"
-    "• Рекомендація у ваших соцмережах / сертифікат з відзнакою\n"
-    " Готові шаблони:\n"
-    "• Договір з клієнтом\n"
-    "• Згода на публікацію фото\n"
-    " Знижка 20–30% на індивідуальні документи:\n"
-    "• Публічна оферта (замість 5 000 грн — 3 500 грн)\n"
-    "• Політика конфіденційності (замість 3 000 грн — 2 400 грн)\n"
-    "• Індивідуальний договір/угода під ваші послуги (замість 3 000 грн — 2 400 грн)"
-)
+tariffs = "🟢 Базовий пакет — 2 500 грн\n..."
 
-payment_reply = "Щоб отримати реквізити для оплати — напишіть «оплата» сюди  @anastasiia_ful"
-question_reply = "Щоб задати питання, пиши мені сюди  @anastasiia_ful"
+payment_reply = "Щоб отримати реквізити для оплати — напишіть «оплата» сюди 👉 @anastasiia_ful"
+question_reply = "Щоб задати питання, пиши мені сюди 👉 @anastasiia_ful"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Привіт! Обери опцію нижче:", reply_markup=keyboard_main)
+    await update.message.reply_text("Привіт! Обери опцію нижче:", reply_markup=keyboard_main)
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    text = update.message.text
-    if text in [' Отримати гайд', ' Детальніше про курс']:
-        await update.message.reply_text(guide_message, reply_markup=keyboard_more, parse_mode="Markdown")
-    elif text == ' Хочу!':
-        await update.message.reply_text(course_program, reply_markup=keyboard_payment)
-    elif text == ' Тарифи':
-        await update.message.reply_text(tariffs)
-    elif text == ' Перейти до оплати':
-        await update.message.reply_text(payment_reply)
-    elif text == ' Задати питання':
-        await update.message.reply_text(question_reply)
-    else:
-        await update.message.reply_text("Обери, будь ласка, варіант з меню ")
+    text = update.message.text
+    if text in ['📥 Отримати гайд', 'ℹ️ Детальніше про курс']:
+        await update.message.reply_text(guide_message, reply_markup=keyboard_more, parse_mode="Markdown")
+    elif text == '🔥 Хочу!':
+        await update.message.reply_text(course_program, reply_markup=keyboard_payment)
+    elif text == '💳 Тарифи':
+        await update.message.reply_text(tariffs)
+    elif text == '➡️ Перейти до оплати':
+        await update.message.reply_text(payment_reply)
+    elif text == '❓ Задати питання':
+        await update.message.reply_text(question_reply)
+    else:
+        await update.message.reply_text("Обери, будь ласка, варіант з меню 👇")
 
 app = ApplicationBuilder().token(os.getenv("BOT_TOKEN")).build()
 app.add_handler(CommandHandler("start", start))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 app.run_polling()
-
