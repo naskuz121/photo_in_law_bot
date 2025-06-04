@@ -1,4 +1,4 @@
-from telegram import Update, ReplyKeyboardMarkup, InputFile
+﻿from telegram import Update, ReplyKeyboardMarkup, InputFile
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 import os
 
@@ -91,7 +91,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
     if text in ['📥 Отримати гайд', 'ℹ️ Детальніше про курс']:
-        await update.message.reply_text("Завантаж гайд тут: https://your-link.com/DMCA_Guide_Final.docx")
+        await update.message.reply_text("Завантаж гайд тут: https://docs.google.com/document/d/1Tp9DIgYJQHk_8g8NpQwkfga6BOk7penK/uc?export=download&ouid=109276152509675749542&rtpof=true&sd=true
+)
         await update.message.reply_text(guide_message, reply_markup=keyboard_more)
     elif text == '🔥 Хочу!':
         await update.message.reply_text(course_program, reply_markup=keyboard_payment)
@@ -106,3 +107,4 @@ app = ApplicationBuilder().token(os.getenv("BOT_TOKEN")).build()
 app.add_handler(CommandHandler("start", start))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 app.run_polling()
+
