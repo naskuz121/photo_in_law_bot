@@ -102,6 +102,15 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if text == '📥 Отримати гайд':
         await update.message.reply_text(guide_message, reply_markup=keyboard_more)
     elif text == 'ℹ️ Детальніше про курс':
+        await update.message.reply_text(
+            "Привіт, фотограф!
+"
+            "Давай по-справжньому розберемося, як ЗАХИСТИТИ себе, свої фото і свої гроші.
+"
+            "Запрошую тебе на мій онлайн-курс «Фотограф в законі» — це юридичний захист, який не зітреться фільтром.
+"
+            "Бажаєш дізнатися програму курсу або дізнатися вартість участі?"
+        )
         await update.message.reply_text(guide_message, reply_markup=keyboard_more)
     elif text == '🔥 Хочу!':
         await update.message.reply_text(course_program, reply_markup=keyboard_payment)
